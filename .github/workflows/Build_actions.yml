@@ -47,6 +47,7 @@ jobs:
 
       - name: Get SUSFS Patches
         run: |
+            KERNEL_DIR="$(pwd)"
             git clone --branch mainline https://github.com/JackA1ltman/NonGKI_Kernel_Build_2nd.git "$KERNEL_DIR/../ksu-susfs"
             cp "$KERNEL_DIR/../ksu-susfs/Patches/susfs_inline_hook_patches.sh" "$KERNEL_DIR/"
             cp "$KERNEL_DIR/../ksu-susfs/Patches/syscall_hook_patches.sh" "$KERNEL_DIR/"
@@ -58,6 +59,7 @@ jobs:
 
       - name: Apply Patches
         run: |
+            KERNEL_DIR="$(pwd)"
             cd "$KERNEL_DIR"
             patch -p1 < susfs_patch_to_4.14.patch
             bash susfs_inline_hook_patches.sh
