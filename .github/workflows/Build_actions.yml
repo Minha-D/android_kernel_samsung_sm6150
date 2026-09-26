@@ -52,8 +52,6 @@ jobs:
             cp "$KERNEL_DIR/../ksu-susfs/Patches/susfs_inline_hook_patches.sh" "$KERNEL_DIR/"
             cp "$KERNEL_DIR/../ksu-susfs/Patches/syscall_hook_patches.sh" "$KERNEL_DIR/"
             cp "$KERNEL_DIR/../ksu-susfs/Patches/Patch/susfs_patch_to_4.14.patch" "$KERNEL_DIR/"
-            cp "$KERNEL_DIR/add_susfs_kconfig.py" "$KERNEL_DIR/KernelSU-Next"
-            cp "$KERNEL_DIR/fix_susfs_selinux_symbols.py" "$KERNEL_DIR/KernelSU-Next"
             chmod +x susfs_inline_hook_patches.sh
             chmod +x syscall_hook_patches.sh
 
@@ -65,8 +63,8 @@ jobs:
             bash susfs_inline_hook_patches.sh
             bash syscall_hook_patches.sh
             python3 fix_susfs_hunks.py
-            python3 KernelSU-Next/add_susfs_kconfig.py
-            python3 KernelSU-Next/fix_susfs_selinux_symbols.py
+            python3 add_susfs_kconfig.py
+            python3 fix_susfs_selinux_symbols.py
 
 
       - name: Build kernel

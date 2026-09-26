@@ -10,8 +10,8 @@ Run from your KernelSU-Next/ directory (where kernel/selinux/selinux.c lives).
 """
 import re, sys
 
-path = "kernel/selinux/selinux.c"
-header_path = "kernel/selinux/selinux.h"
+path = "KernelSU-Next/kernel/selinux/selinux.c"
+header_path = "KernelSU-Next/kernel/selinux/selinux.h"
 
 with open(path, "r") as f:
     content = f.read()

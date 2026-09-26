@@ -7,7 +7,7 @@ KSU-Next's current Kconfig structure.
 """
 import re, sys
 
-path = "kernel/Kconfig"
+path = "KernelSU-Next/kernel/Kconfig"
 with open(path, "r") as f:
     content = f.read()
 
