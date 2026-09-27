@@ -27,7 +27,7 @@ jobs:
           KERNEL_DIR="$(pwd)"
           mkdir -p "$KERNEL_DIR/../toolchains"
           # Clang r416183b — the version confirmed working for this kernel
-          git clone --depth=1 https://github.com/LineageOS/android_prebuilts_clang_kernel_linux-x86_clang-r416183b "$KERNEL_DIR/../toolchains/clang"
+          git clone --depth=1 https://github.com/Minha-D/clang-r383902b "$KERNEL_DIR/../toolchains/clang"
           # GCC aarch64/arm — only used for CROSS_COMPILE (binutils/ld/as), Clang is the real compiler
           git clone --depth=1 https://github.com/Minha-D/linaro-toolchain-latest-latest-5 "$KERNEL_DIR/../toolchains/gcc64"
           git clone --depth=1 https://github.com/LineageOS/android_prebuilts_gcc_linux-x86_arm_arm-linux-androideabi-4.9 "$KERNEL_DIR/../toolchains/gcc32"
