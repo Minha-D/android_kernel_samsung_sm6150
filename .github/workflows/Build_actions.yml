@@ -60,9 +60,9 @@ jobs:
             KERNEL_DIR="$(pwd)"
             cd "$KERNEL_DIR"
             patch -p1 < susfs_patch_to_4.14.patch || true
+            python3 fix_susfs_hunks_v2.py
             bash susfs_inline_hook_patches.sh
             bash syscall_hook_patches.sh
-            python3 fix_susfs_hunks.py
             python3 add_susfs_kconfig.py
             python3 fix_susfs_selinux_symbols.py
 
