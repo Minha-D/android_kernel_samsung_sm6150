@@ -11,7 +11,7 @@ mkdir -p out
 # is set accordingly below. CLANG_TRIPLE stays aarch64-linux-gnu- regardless,
 # since that's Clang's own internal target string, unrelated to the binutils
 # package's naming.
-CROSS_COMPILE="$KERNEL_DIR/../toolchains/gcc64/bin/aarch64-linux-android-"
+CROSS_COMPILE="$KERNEL_DIR/../toolchains/gcc64/bin/aarch64-linux-gnu-"
 CROSS_COMPILE_ARM32="$KERNEL_DIR/../toolchains/gcc32/bin/arm-linux-androideabi-"
 KERNEL_LLVM_BIN="$KERNEL_DIR/../toolchains/clang/bin/clang"
 CLANG_TRIPLE="aarch64-linux-gnu-"
