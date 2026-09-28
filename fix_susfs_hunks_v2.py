@@ -140,6 +140,20 @@ orig_flow:
     "fs/notify/fdinfo.c (SUS_KSTAT + SUS_MOUNT block, mask hoisted)"
 ))
 
+# --- fs/stat.c: missing susfs_def.h include for STATX_SUS_KSTAT etc.
+# The main susfs_patch_to_4.14.patch adds SUS_KSTAT code here but never adds
+# this include itself — it's normally supplied by susfs_inline_hook_patches.sh,
+# but that script now correctly skips this whole file (it already contains
+# ksu_handle markers from syscall_hook_patches.sh running first), so this one
+# genuinely-needed include gets skipped along with the hooks that shouldn't
+# be re-inserted. Add it explicitly here instead.
+results.append(apply_fix(
+    "fs/stat.c",
+    re.compile(r'(#include <asm/unistd\.h>\n)'),
+    r'\1#ifdef CONFIG_KSU_SUSFS_SUS_KSTAT\n#include <linux/susfs_def.h>\n#endif // #ifdef CONFIG_KSU_SUSFS_SUS_KSTAT\n',
+    "fs/stat.c (susfs_def.h include)"
+))
+
 print()
 if all(results):
     print(f"All {len(results)} fixes applied successfully.")
