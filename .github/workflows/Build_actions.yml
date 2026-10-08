@@ -58,6 +58,7 @@ jobs:
             chmod +x syscall_hook_patches.sh
             bash syscall_hook_patches.sh
             patch -p1 < susfs_patch_to_4.14.patch || true
+            python3 fix_susfs_hunks_v2.py
             chmod +x apply_susfs_ksun_m40.sh
             bash apply_susfs_ksun_m40.sh || true
 
