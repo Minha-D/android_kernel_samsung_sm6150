@@ -6,13 +6,16 @@ on:
     branches:
       - 'KernelSU-Next'
 
+permissions:
+  contents: write
+
 jobs:
   build_kernel:
     runs-on: ubuntu-22.04
 
     steps:
       - name: Checkout repo
-        uses: actions/checkout@v4
+        uses: actions/checkout@v6
 
       - name: Set up build environment
         run: |
@@ -62,6 +65,38 @@ jobs:
             chmod +x apply_susfs_ksun_m40.sh
             bash apply_susfs_ksun_m40.sh || true
 
+      - name: Detect versions
+        id: ver
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          # SUSFS: read from the patched header (same source the Kbuild greps)
+          SUSFS_VER=$(grep -E '^#define SUSFS_VERSION' include/linux/susfs.h 2>/dev/null \
+                      | cut -d' ' -f3 | tr -d '"')
+          [ -z "$SUSFS_VER" ] && SUSFS_VER="unknown"
+
+          # KernelSU-Next: prefer the cloned repo's own tag, fall back to GitHub API
+          KSUN_VER=""
+          for d in KernelSU-Next drivers/kernelsu; do
+            if [ -e "$d/.git" ]; then
+              KSUN_VER=$(git -C "$d" describe --tags --abbrev=0 2>/dev/null) && break
+            fi
+          done
+          if [ -z "$KSUN_VER" ]; then
+            KSUN_VER=$(curl -fsSL -H "Authorization: Bearer $GH_TOKEN" \
+              https://api.github.com/repos/KernelSU-Next/KernelSU-Next/tags \
+              | grep -m1 '"name"' | cut -d'"' -f4)
+          fi
+          [ -z "$KSUN_VER" ] && KSUN_VER="unknown"
+
+          # Kernel version, so it isn't hardcoded in the release notes either
+          KERNEL_VER=$(make -s kernelversion 2>/dev/null || echo "unknown")
+
+          echo "susfs=$SUSFS_VER"   >> "$GITHUB_OUTPUT"
+          echo "ksun=$KSUN_VER"     >> "$GITHUB_OUTPUT"
+          echo "kernel=$KERNEL_VER" >> "$GITHUB_OUTPUT"
+          echo "KSU-Next=$KSUN_VER SUSFS=$SUSFS_VER Kernel=$KERNEL_VER"
+
       - name: Add Python2 Support
         run: |
             sudo apt-get update
@@ -95,9 +130,9 @@ jobs:
           name: M40 KernelSU-Next + SUSFS ${{ github.run_number }}
           tag_name: ${{ github.run_number }}
           body: |
-            **M40 (sm6150) kernel — KernelSU-Next-3.4.0-lagacy (manual hooks) + SUSFS v2.3.0**
+            **M40 (sm6150) kernel — KernelSU-Next ${{ steps.ver.outputs.ksun }} (manual hooks) + SUSFS ${{ steps.ver.outputs.susfs }}**
 
-            - Kernel: 4.14.190
+            - Kernel: ${{ steps.ver.outputs.kernel }}
             - Clang: r383902b
             - Flash directly with KSU-Next Manager's AnyKernel3 support, or any
               custom recovery that supports AnyKernel3 zips.
