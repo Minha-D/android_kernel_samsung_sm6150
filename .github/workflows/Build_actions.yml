@@ -64,6 +64,7 @@ jobs:
             python3 fix_susfs_hunks_v2.py
             chmod +x apply_susfs_ksun_m40.sh
             bash apply_susfs_ksun_m40.sh || true
+            python3 fix_allowlist_creds.py
 
       - name: Detect versions
         id: ver

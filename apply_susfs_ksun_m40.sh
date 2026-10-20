@@ -412,10 +412,12 @@ diff --git a/drivers/kernelsu/supercall/dispatch.c b/drivers/kernelsu/supercall/
 index 2d550219b73e..f9b7a73bfb43 100644
 --- a/drivers/kernelsu/supercall/dispatch.c
 +++ b/drivers/kernelsu/supercall/dispatch.c
-@@ -23,6 +23,9 @@
+@@ -23,8 +23,11 @@
  #include "sulog/event.h"
  #include "sulog/fd.h"
  #include "supercall/supercall.h"
+ #include "infra/symbol_resolver.h"
+ #include "preinit/preinit.h"
 +#ifdef CONFIG_KSU_SUSFS
 +#include <linux/susfs.h>
 +#endif // #ifdef CONFIG_KSU_SUSFS
